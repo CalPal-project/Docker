@@ -1,0 +1,4 @@
+ docker compose up -d --build -> naredi docker container, in pol runnas za pb
+
+ pol dodamo se service za zaganjat use api-je in frontend. zaenkrat mamo sam podatkovno bazo 
+ ko spreminjas karkol mors dat --build 

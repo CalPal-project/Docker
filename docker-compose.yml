@@ -1,0 +1,48 @@
+networks:
+  calpal-net:
+    name: calpal-network
+    driver: bridge
+
+services:
+  db:
+    image: mysql
+    container_name: db-calpal
+    restart: unless-stopped
+    environment:
+        
+      - MYSQL_ROOT_PASSWORD=calpalRoot
+      - MYSQL_DATABASE=calpalDatabase
+      - MYSQL_USER=calpalUser
+      - MYSQL_PASSWORD=calpal
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    networks:
+      - calpal-net
+    ports:
+      - "33062:3306"
+
+  usermanagement:
+    build:
+      context: ../User-Managment
+      dockerfile: Dockerfile
+    container_name: usermanagement-service
+    restart: unless-stopped
+    networks:
+      - calpal-net
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ../Frontend/calPal
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    networks:
+      - calpal-net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - usermanagement
